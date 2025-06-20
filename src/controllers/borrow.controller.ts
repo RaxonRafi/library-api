@@ -1,0 +1,46 @@
+import express, { Request, Response } from 'express'
+import { Borrow } from '../models/borrows.model';
+import { gotBorrowSummary } from '../services/borrow.service';
+export const borrowRoute = express.Router();
+
+borrowRoute.post("/borrow",async(req:Request,res:Response)=> {
+    try {
+        const body = req.body;
+        const borrowBook = await Borrow.create(body)
+
+        res.status(201).json({
+            success:true,
+            message:"Book borrowed successfully",
+            data:borrowBook
+        });
+    } catch (error: any) {
+        console.log(error);
+        res.status(400).json({
+            message:"Validation failed",
+            success: false,
+            error: error.message  
+        });
+    }
+    
+})
+borrowRoute.get("/borrow",async(req:Request,res:Response)=> {
+    try {
+        const result = await gotBorrowSummary();
+
+        console.log(gotBorrowSummary());
+        res.status(201).json({
+            success:true,
+            message:"Borrowed books summary retrieved successfully",
+            data:result
+        });
+
+    } catch (error: any) {
+        console.log(error);
+        res.status(400).json({
+            message:"Validation failed",
+            success: false,
+            error: error.message  
+        });
+    }
+    
+})
