@@ -37,13 +37,13 @@ cd library-api
 npm install
 
 ```
-### Setup environment variables
+### 2. Setup environment variables
 
 ```env
 MONGODB_URI="YOUR MONGODB URL",
 PORT="ENTER PORT"
 ```
-## Run the App Locally
+### 3. Run the App Locally
 
 ```bash
 
