@@ -4,8 +4,8 @@ import app from './app';
 
 
 let server: Server;
-let port = process.env.PORT || 5000;
-let db_uri = process.env.MONGODB_URI as string
+const port = process.env.PORT || 5000;
+const db_uri = process.env.MONGODB_URI as string
 
 async function main() {
     try {
