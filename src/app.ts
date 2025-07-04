@@ -11,7 +11,7 @@ app.use("/api",booksRoute)
 app.use("/api",borrowRoute)
 app.use(
   cors({
-    origin:'https://library-app-red-gamma.vercel.app'
+    origin:'http://localhost:5173'
    })
 );
 
