@@ -6,8 +6,8 @@ import cors from 'cors';
 const app: Application = express();
 config();
 
-app.use(cors({ origin: "*" }));
 app.use(express.json())
+app.use(cors({ origin: "*" }));
 app.use("/api",booksRoute)
 app.use("/api",borrowRoute)
 
