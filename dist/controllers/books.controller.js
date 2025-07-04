@@ -23,14 +23,14 @@ exports.booksRoute.post("/books", (req, res) => __awaiter(void 0, void 0, void 0
         res.status(201).json({
             success: true,
             message: "Book created successfully",
-            data: book
+            data: book,
         });
     }
     catch (error) {
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error
+            error: error,
         });
     }
 }));
@@ -45,17 +45,26 @@ exports.booksRoute.get("/books", (req, res) => __awaiter(void 0, void 0, void 0,
         const books = yield books_model_1.Books.find(query)
             .sort({ createdAt: sortOrder })
             .limit(Number(limit));
-        res.status(200).json({
-            success: true,
-            message: "Books retrieved successfully",
-            data: books
-        });
+        if (books.length > 0) {
+            res.status(200).json({
+                success: true,
+                message: "Books retrieved successfully",
+                data: books,
+            });
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: "Books not Available",
+                data: books,
+            });
+        }
     }
     catch (error) {
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error
+            error: error,
         });
     }
 }));
@@ -66,14 +75,14 @@ exports.booksRoute.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0,
         res.status(200).json({
             success: true,
             message: "Books retrieved successfully",
-            data: book
+            data: book,
         });
     }
     catch (error) {
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error
+            error: error,
         });
     }
 }));
@@ -81,18 +90,20 @@ exports.booksRoute.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0,
     try {
         const bookId = req.params.bookId;
         const updateData = req.body;
-        const book = yield books_model_1.Books.findByIdAndUpdate(bookId, updateData, { new: true });
+        const book = yield books_model_1.Books.findByIdAndUpdate(bookId, updateData, {
+            new: true,
+        });
         res.status(200).json({
             success: true,
             message: "Book updated successfully",
-            data: book
+            data: book,
         });
     }
     catch (error) {
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error
+            error: error,
         });
     }
 }));
@@ -103,14 +114,14 @@ exports.booksRoute.delete("/books/:bookId", (req, res) => __awaiter(void 0, void
         res.status(200).json({
             success: true,
             message: "Book deleted successfully",
-            data: book
+            data: book,
         });
     }
     catch (error) {
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error
+            error: error,
         });
     }
 }));

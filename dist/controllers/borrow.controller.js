@@ -24,34 +24,40 @@ exports.borrowRoute.post("/borrow", (req, res) => __awaiter(void 0, void 0, void
         res.status(201).json({
             success: true,
             message: "Book borrowed successfully",
-            data: borrowBook
+            data: borrowBook,
         });
     }
     catch (error) {
-        console.log(error);
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error.message
+            error: error.message,
         });
     }
 }));
 exports.borrowRoute.get("/borrow", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, borrow_service_1.gotBorrowSummary)();
-        console.log((0, borrow_service_1.gotBorrowSummary)());
-        res.status(201).json({
-            success: true,
-            message: "Borrowed books summary retrieved successfully",
-            data: result
-        });
+        if (result.length > 0) {
+            res.status(201).json({
+                success: true,
+                message: "Borrowed books summary retrieved successfully",
+                data: result,
+            });
+        }
+        else {
+            res.status(404).json({
+                success: true,
+                message: "Borrowed books summary not available!",
+                data: result,
+            });
+        }
     }
     catch (error) {
-        console.log(error);
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error.message
+            error: error.message,
         });
     }
 }));

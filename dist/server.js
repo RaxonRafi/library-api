@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 let server;
-let port = process.env.PORT || 5000;
-let db_uri = process.env.MONGODB_URI;
+const port = process.env.PORT || 5000;
+const db_uri = process.env.MONGODB_URI;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
