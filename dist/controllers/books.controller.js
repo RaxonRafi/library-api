@@ -36,35 +36,39 @@ exports.booksRoute.post("/books", (req, res) => __awaiter(void 0, void 0, void 0
 }));
 exports.booksRoute.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { filter, sort = "desc", limit = 10 } = req.query;
+        const { filter, sort = "desc", page = 1, limit = 10 } = req.query;
         const query = {};
         if (filter) {
             query.genre = filter;
         }
         const sortOrder = sort === "asc" ? 1 : -1;
-        const books = yield books_model_1.Books.find(query)
-            .sort({ createdAt: sortOrder })
-            .limit(Number(limit));
-        if (books.length > 0) {
-            res.status(200).json({
-                success: true,
-                message: "Books retrieved successfully",
-                data: books,
-            });
-        }
-        else {
-            res.status(200).json({
-                success: true,
-                message: "Books not Available",
-                data: books,
-            });
-        }
+        const pageNumber = parseInt(page) || 1;
+        const pageSize = parseInt(limit) || 10;
+        const skip = (pageNumber - 1) * pageSize;
+        const [books, total] = yield Promise.all([
+            books_model_1.Books.find(query)
+                .sort({ createdAt: sortOrder })
+                .skip(skip)
+                .limit(pageSize),
+            books_model_1.Books.countDocuments(query),
+        ]);
+        res.status(200).json({
+            success: true,
+            message: books.length > 0 ? "Books retrieved successfully" : "Books not available",
+            data: books,
+            meta: {
+                totalItems: total,
+                totalPages: Math.ceil(total / pageSize),
+                currentPage: pageNumber,
+                pageSize,
+            },
+        });
     }
     catch (error) {
         res.status(400).json({
             message: "Validation failed",
             success: false,
-            error: error,
+            error: error instanceof Error ? error.message : error,
         });
     }
 }));
