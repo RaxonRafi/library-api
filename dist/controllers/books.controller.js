@@ -94,6 +94,9 @@ exports.booksRoute.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0,
     try {
         const bookId = req.params.bookId;
         const updateData = req.body;
+        if (typeof updateData.copies === "number") {
+            updateData.available = updateData.copies > 0;
+        }
         const book = yield books_model_1.Books.findByIdAndUpdate(bookId, updateData, {
             new: true,
         });
