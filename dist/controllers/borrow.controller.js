@@ -16,10 +16,20 @@ exports.borrowRoute = void 0;
 const express_1 = __importDefault(require("express"));
 const borrows_model_1 = require("../models/borrows.model");
 const borrow_service_1 = require("../services/borrow.service");
+const date_fns_1 = require("date-fns");
 exports.borrowRoute = express_1.default.Router();
 exports.borrowRoute.post("/borrow", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
+        const today = (0, date_fns_1.startOfDay)(new Date());
+        const dueDate = new Date(body.dueDate);
+        if ((0, date_fns_1.isBefore)(dueDate, today)) {
+            res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                error: "Due date cannot be in the past.",
+            });
+        }
         const borrowBook = yield borrows_model_1.Borrow.create(body);
         res.status(201).json({
             success: true,

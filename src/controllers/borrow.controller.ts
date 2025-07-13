@@ -9,15 +9,15 @@ borrowRoute.post("/borrow", async (req: Request, res: Response) => {
     const body = req.body;
     const today = startOfDay(new Date());
     const dueDate = new Date(body.dueDate)
+    
     if (isBefore(dueDate, today)) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "Validation failed",
         error: "Due date cannot be in the past.",
       });
     }
     const borrowBook = await Borrow.create(body);
-
     res.status(201).json({
         success: true,
         message: "Book borrowed successfully",
@@ -32,6 +32,8 @@ borrowRoute.post("/borrow", async (req: Request, res: Response) => {
     });
   }
 });
+
+
 borrowRoute.get("/borrow", async (req: Request, res: Response) => {
   try {
     const result = await gotBorrowSummary();
